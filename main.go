@@ -1,4 +1,4 @@
-package LearnGo_crawl
+package main
 
 import (
 	"net/http"
@@ -10,6 +10,7 @@ import (
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/transform"
+	"regexp"
 )
 
 func main(){
@@ -38,10 +39,10 @@ func main(){
 		panic(err)
 	}
 
-	fmt.Printf("%s",result)
-
+	//fmt.Printf("%s",result)
+	parseContent(result)
 }
- 
+
 
 func determinEncoding(r * bufio.Reader) encoding.Encoding{
 
@@ -54,4 +55,18 @@ func determinEncoding(r * bufio.Reader) encoding.Encoding{
 
 		e,_,_:=charset.DetermineEncoding(bytes,"")
 		return e
+}
+
+func parseContent(content []byte){
+	//<a href="/tag/科普" class="tag">科普</a>
+	re:= regexp.MustCompile(`<a href="([^"]+)" class="tag">[^<]+</a>`)
+
+	matches:= re.FindAllSubmatch(content,-1)
+
+	for _,m:= range matches{
+		fmt.Printf("url:%s\n","https://book.douban.com"+string(m[1]))
+	}
+
+
+
 }

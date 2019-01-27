@@ -7,7 +7,7 @@ import (
 
 
 const regexpStr= `<a href="([^"]+)" class="tag">([^<]+)</a>`
-func ParseContent(content []byte) engine.ParseResult{
+func ParseTag(content []byte) engine.ParseResult{
 	//<a href="/tag/科普" class="tag">科普</a>
 	re:= regexp.MustCompile(regexpStr)
 
@@ -19,7 +19,7 @@ func ParseContent(content []byte) engine.ParseResult{
 		result.Items = append(result.Items,m[2])
 		result.Requesrts = append(result.Requesrts,engine.Request{
 			Url:"https://book.douban.com"+string(m[1]),
-			ParseFunc: engine.NilParse,
+			ParseFunc: ParseBookList,
 		})
 	}
 

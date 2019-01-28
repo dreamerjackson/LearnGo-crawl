@@ -79,7 +79,7 @@ func Fetch(weburl string )([]byte,error){
 
 
 	proxy := func(_ *http.Request) (*url.URL, error) {
-		return url.Parse("http://127.0.0.1:1087")//根据定义Proxy func(*Request) (*url.URL, error)这里要返回url.URL
+		return url.Parse("http://127.0.0.1:51816")//根据定义Proxy func(*Request) (*url.URL, error)这里要返回url.URL
 	}
 	transport := &http.Transport{Proxy: proxy}
 	client := &http.Client{Transport: transport}
@@ -90,9 +90,14 @@ func Fetch(weburl string )([]byte,error){
 	}
 	req.Header.Set("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36")
 	resp,err:= client.Do(req)
+	if err!=nil{
+		return nil,fmt.Errorf("ERROR: get url:%s",weburl)
+	}
 	bodyReader:= bufio.NewReader(resp.Body)
 	e:= DeterminEncoding(bodyReader)
-
+	if err!=nil{
+		return nil,fmt.Errorf("ERROR: get url:%s",weburl)
+	}
 	utf8Reader:= transform.NewReader(bodyReader,e.NewDecoder())
 	return ioutil.ReadAll(utf8Reader)
 }

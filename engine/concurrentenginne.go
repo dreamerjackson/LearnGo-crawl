@@ -18,6 +18,7 @@ type Scheduler interface {
 	Submit(Request)
 	Run()
 	WorkReady(chan Request)
+	WorkChan() (chan Request)
 }
 
 
@@ -30,7 +31,7 @@ func (e* ConcurrentEngine) Run(seeds...Request){
 
 
 		for i:=0;i<e.WorkCount;i++{
-			CreateWork(out,e.Scheduler)
+			CreateWork(e.Scheduler.WorkChan(),out,e.Scheduler)
 		}
 
 
@@ -55,9 +56,7 @@ func (e* ConcurrentEngine) Run(seeds...Request){
 
 
 }
-func CreateWork( out chan ParseResult,s Scheduler) {
-
-	in :=make(chan Request)
+func CreateWork( in chan Request,out chan ParseResult,s Scheduler) {
 	go func(){
 		for{
 

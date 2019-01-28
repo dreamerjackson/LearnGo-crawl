@@ -4,11 +4,13 @@ import (
 	"log"
 	"gopkg.in/olivere/elastic.v5"
 	"context"
+	"crawl/LearnGo-crawl/engine"
+	"errors"
 )
 
-func ItemSave() chan interface{}{
+func ItemSave() chan engine.Item{
 
-	out:=make(chan interface{})
+	out:=make(chan engine.Item)
 
 	go func(){
 		itemcount:=0
@@ -19,13 +21,10 @@ func ItemSave() chan interface{}{
 			save(item)
 			itemcount++
 		}
-
 	}()
-
-
 	return out
 }
-func save(item interface{}) {
+func save(item engine.Item) error{
 	client,err := elastic.NewClient(
 		elastic.SetSniff(false))
 
@@ -33,11 +32,25 @@ func save(item interface{}) {
 		panic(err)
 	}
 
+	if item.Type ==""{
+		return errors.New("must supply Type")
+	}
 
-	_,err = client.Index().Index("dating_profile").Type("zhenai").BodyJson(item).Do(context.Background())
+	indexService:= client.Index().Index("dating_profile").Type(item.Type).BodyJson(item)
+
+	if item.Id !=""{
+		indexService.Id(item.Id)
+	}
+
+	_,err  = indexService.Do(context.Background())
+
+
+
 	if err!=nil{
 		panic(err)
 	}
+
+	return nil
 
 }
 

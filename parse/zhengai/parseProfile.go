@@ -54,7 +54,14 @@ func PaesrProfile(contents []byte,url string,name string) engine.ParseResult{
 
 
 	result:=engine.ParseResult{
-			Items:[]interface{}{profile},
+		Items:[]engine.Item{
+			{
+				Url:url,
+				Type:"zhenai",
+				Id: extractString([]byte(url),idRe),
+				Payload:profile,
+			},
+		},
 	}
 
 	return result

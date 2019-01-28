@@ -5,7 +5,11 @@ import (
 	"log"
 )
 
-func Run(seeds...Request){
+type simleEngine struct{
+
+}
+
+func (s simleEngine)Run(seeds...Request){
 
 	var requests []Request
 

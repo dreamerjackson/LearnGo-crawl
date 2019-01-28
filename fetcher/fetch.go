@@ -61,6 +61,9 @@ func Fetch(url string )([]byte,error){
 	req.Header.Set("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36")
 
 	resp,err:= client.Do(req)
+	if err!=nil{
+		return nil,fmt.Errorf("ERROR: get url:%s",url)
+	}
 
 
 	bodyReader:= bufio.NewReader(resp.Body)

@@ -43,9 +43,9 @@ func BaseFetch(url string )([]byte,error){
 
 
 
-var ratelimit = time.Tick(1000*time.Millisecond)
+var ratelimit = time.Tick(10*time.Millisecond)
 //模拟浏览器访问
-func webFetch(url string )([]byte,error){
+func Fetch(url string )([]byte,error){
 
 	<-ratelimit
 
@@ -73,7 +73,7 @@ func webFetch(url string )([]byte,error){
 }
 
 //http代理访问访问
-func Fetch(weburl string )([]byte,error){
+func proxyFetch(weburl string )([]byte,error){
 
 	<-ratelimit
 

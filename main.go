@@ -2,8 +2,8 @@ package main
 
 import (
 	"crawl/LearnGo-crawl/engine"
-	"crawl/LearnGo-crawl/parse"
 	"crawl/LearnGo-crawl/scheduler"
+	"crawl/LearnGo-crawl/parse/zhengai"
 )
 
 func main(){
@@ -13,8 +13,8 @@ func main(){
 	}
 
 	e.Run(engine.Request{
-		Url:"https://book.douban.com",
-		ParseFunc:parse.ParseTag,
+		Url:"http://www.zhenai.com/zhenghun",
+		ParseFunc:zhengai.ParseCity,
 	})
 }
 

@@ -50,7 +50,4 @@ func ExtraString(contents []byte,re*regexp.Regexp) string{
 	}else{
 		return ""
 	}
-
-
-
 }

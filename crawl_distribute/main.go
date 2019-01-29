@@ -4,12 +4,12 @@ import (
 	"crawl/LearnGo-crawl/engine"
 	"crawl/LearnGo-crawl/scheduler"
 	"crawl/LearnGo-crawl/parse/zhengai"
-	"crawl/LearnGo-crawl/persist"
+	"crawl/LearnGo-crawl/crawl_distribute/client"
 )
 
 func main(){
 
-	itemsave,err:= persist.ItemSave()
+	itemsave,err:= client.ItemSave(":1234")
 
 	if err!=nil{
 		panic(err)
@@ -25,7 +25,5 @@ func main(){
 		ParseFunc:zhengai.ParseCity,
 	})
 }
-
-
 
 

@@ -29,7 +29,7 @@ func (s simleEngine)Run(seeds...Request){
 			log.Printf("Fetch Error: %s",r.Url)
 		}
 
-		parseresult:=  r.ParseFunc(body)
+		parseresult:=  r.Parse.Parse(body,r.Url)
 
 		requests = append(requests,parseresult.Requesrts...)
 

@@ -77,3 +77,21 @@ func extractString(contents []byte,re*regexp.Regexp) string{
 		return ""
 	}
 }
+
+type ProfileParse struct {
+	userName string
+}
+
+func (p *ProfileParse) Parse(contents []byte, url string) engine.ParseResult {
+	return PaesrProfile(contents,url,p.userName)
+}
+
+func (p *ProfileParse) Serialize() (name string, args interface{}) {
+	return "ProfileParse",p.userName
+}
+
+func NewprofileParse(name string) *ProfileParse{
+	return &ProfileParse{
+		userName:name,
+	}
+}

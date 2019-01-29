@@ -5,13 +5,17 @@ import (
 	"log"
 )
 
+type Processor func( Request) (ParseResult,error)
 
 
 type ConcurrentEngine struct{
 	Scheduler Scheduler
 	WorkCount int
 	ItemChan  chan Item
+	RequestProcessor Processor
 }
+
+
 
 
 type Scheduler interface {
@@ -31,7 +35,7 @@ func (e* ConcurrentEngine) Run(seeds...Request){
 
 
 		for i:=0;i<e.WorkCount;i++{
-			CreateWork(e.Scheduler.WorkChan(),out,e.Scheduler)
+			e.CreateWork(e.Scheduler.WorkChan(),out,e.Scheduler)
 		}
 
 
@@ -55,15 +59,15 @@ func (e* ConcurrentEngine) Run(seeds...Request){
 
 
 }
-func CreateWork( in chan Request,out chan ParseResult,s Scheduler) {
+func (e * ConcurrentEngine)CreateWork( in chan Request,out chan ParseResult,s Scheduler) {
 	go func(){
 		for{
 
 			s.WorkReady(in)
 			request:= <-in
 
-			result,err:= worker(request)
-
+			result,err:= e.RequestProcessor(request)
+			//result,err:= Worker(request)
 			if err!=nil{
 				continue
 			}
@@ -75,7 +79,7 @@ func CreateWork( in chan Request,out chan ParseResult,s Scheduler) {
 }
 
 
-func worker(r Request) (ParseResult, error) {
+func Worker(r Request) (ParseResult, error) {
 	//fmt.Printf("Fetch url:%s\n",r.Url)
 
 	body,err:= fetcher.Fetch(r.Url)
